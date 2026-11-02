@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Asignación de Vehículo a Garage</title>
+    <link th:href="@{https://jsdelivr.net}" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5" style="max-width: 600px;">
+
+    <!-- MENSAJES DE ALERTA OPERATIVA -->
+    <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <strong>⚠️ Error Operativo:</strong> <span th:text="${mensajeError}">Texto del error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- TARJETA DEL FORMULARIO -->
+    <div class="card shadow border-0">
+        <div class="card-header bg-info text-white text-center py-3">
+            <h4 class="mb-0 fw-bold">⚓ Operación de Resguardo: Cochera Nº <span th:text="${garage.numeroGarage}">0</span></h4>
+        </div>
+        <div class="card-body p-4">
+
+            <!-- DATOS TÉCNICOS EN TIEMPO REAL DE LA COCHERA SELECCIONADA -->
+            <div class="alert alert-secondary py-2 px-3 mb-4 shadow-sm">
+                <div class="row text-center small">
+                    <div class="col-6 border-end">
+                        <strong>Sector / Letra:</strong> <span class="text-primary fw-bold" th:text="'Zona ' + ${garage.zona.letra}">-</span>
+                    </div>
+                    <div class="col-6">
+                        <strong>Dimensiones de Zona:</strong> <span class="text-dark" th:text="${garage.zona.profundidadGarages} + 'm x ' + ${garage.zona.anchoGarages} + 'm'">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORMULARIO DE ASIGNACIÓN -->
+            <form th:action="@{/garages/guardar-estacionamiento}" method="post">
+                <!-- Parámetro de control enviado por RequestParam -->
+                <input type="hidden" name="numeroGarage" th:value="${garage.numeroGarage}" />
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-secondary">Seleccionar Vehículo a Estacionar</label>
+                    <select name="matriculaVehiculo" class="form-select form-select-lg" id="vehiculoSelect">
+                        <!-- Opción por defecto que permite desocupar el espacio si se retira la unidad -->
+                        <option value="">-- Ninguno / Liberar y vaciar espacio físico --</option>
+
+                        <!-- Recorremos el listado global de vehículos cargados en el sistema -->
+                        <option th:each="v : ${vehiculos}"
+                                th:value="${v.matricula}"
+                                th:text="${v.matricula} + ' - ' + ${v.nombre} + ' (' + ${v.tipo} + ') | Socio: ' + ${v.socio.nombre}"
+                                th:selected="${garage.vehiculo != null and garage.vehiculo.matricula == v.matricula}">
+                        </option>
+                    </select>
+                    <div class="form-text mt-2 text-muted">
+                        💡 **Nota del sistema:** Al seleccionar una patente, el software asocia automáticamente al vehículo con esta cochera y estampa la **fecha de asignación actual** en la bitácora relacional.
+                    </div>
+                </div>
+
+                <!-- CONTENEDOR DE INFORMACIÓN DE PROPIEDAD DEL INMUEBLE (OPCIONAL) -->
+                <div class="card bg-light border-0 mb-4 p-3 rounded shadow-sm">
+                    <p class="mb-1 small text-muted"><strong>Situación patrimonial de la cochera:</strong></p>
+                    <span th:if="${garage.socio != null}" class="text-success small fw-semibold">
+                        👤 Esta celda fue comprada por el socio: <span th:text="${garage.socio.nombre}">Socio</span> el <span th:text="${garage.fechaCompra}">-</span>.
+                    </span>
+                    <span th:if="${garage.socio == null}" class="text-warning small fw-semibold">
+                        🏢 Esta celda pertenece al stock de alquiler/espacio libre de la guardería (Sin propietario).
+                    </span>
+                </div>
+
+                <!-- BOTONES DE NAVEGACIÓN -->
+                <div class="d-flex justify-content-between align-items-center pt-2">
+                    <a th:href="@{/garages}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-info px-4 fw-bold text-white shadow-sm">Confirmar Ubicación</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script th:src="@{https://jsdelivr.net}"></script>
+</body>
+</html>
+

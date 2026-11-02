@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Socio</title>
+    <!--<link th:href="@{https://jsdelivr.net}" rel="stylesheet"> -->
+
+    <!-- ENLACE LOCAL A BOOSTRAP COMPATIBLE CON THYMELEAF -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+<body class="bg-light">
+<div class="container mt-5" style="max-width: 600px;">
+
+    <!-- Cartel de Alerta de Error (Se renderiza solo si el controlador lo envía) -->
+    <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>⚠️ Error Operativo:</strong> <span th:text="${mensajeError}">Texto del error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white text-center">
+            <h4 class="mb-0" th:text="${socio.id != null} ? '✏️ Editar Socio' : '➕ Registrar Socio'">Formulario</h4>
+        </div>
+        <div class="card-body p-4">
+            <form th:action="@{/socios/guardar}" th:object="${socio}" method="post">
+                <!-- Campos ocultos de control -->
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{tipoUsuario}" />
+
+                <h5 class="text-secondary border-bottom pb-2 mb-3">Datos de Cuenta (Tabla Usuarios)</h5>
+                <div class="mb-3">
+                    <label class="form-label">Nombre de Usuario</label>
+                    <input type="text" th:field="*{username}" class="form-control" required placeholder="ej: jperez" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" th:field="*{password}" class="form-control" required placeholder="••••••••" />
+                </div>
+
+                <h5 class="text-secondary border-bottom pb-2 mb-3 mt-4">Datos Personales (Tabla Socios)</h5>
+                <div class="mb-3">
+                    <label class="form-label">Nombre Completo</label>
+                    <input type="text" th:field="*{nombre}" class="form-control" required placeholder="Juan Pérez" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Documento (DNI)</label>
+                    <input type="text" th:field="*{dni}" class="form-control" required placeholder="Número de documento" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Fecha de Ingreso</label>
+                    <input type="date" th:field="*{fechaIngreso}" class="form-control" required />
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/socios}" class="btn btn-secondary">Volver al listado</a>
+                    <button type="submit" class="btn btn-success px-4">Guardar Datos</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- SCRIPT LOCAL A BOOSTRAP COMPATIBLE CON THYMELEAF -->
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

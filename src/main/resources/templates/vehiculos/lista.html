@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Control de Vehículos - Guardería</title>
+    <link th:href="@{https://jsdelivr.net}" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<!-- BARRA DE NAVEGACIÓN SUPERIOR PARA INTEGRACIÓN DEL PROYECTO -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/}">⚓ Sistema Guardería</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/socios}">Socios</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/vehiculos}">Vehículos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/empleados}">Empleados</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/garages}">Garages</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- ALERTAS DINÁMICAS DE OPERACIÓN EXITOSA -->
+    <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <strong>✔️ Éxito:</strong> <span th:text="${mensajeExito}">Operación realizada.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- ENCABEZADO DE MÓDULO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a th:href="@{/}" class="btn btn-outline-secondary btn-sm me-2">⬅️ Volver al Panel</a>
+            <h2 class="d-inline-block align-middle mb-0">Padrón de Vehículos Registrados</h2>
+        </div>
+        <!-- Botón para ir al formulario de alta que armamos antes -->
+        <a th:href="@{/vehiculos/nuevo}" class="btn btn-primary">➕ Registrar Vehículo</a>
+    </div>
+
+    <!-- CONTENEDOR DE LA TABLA -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4">Matrícula</th>
+                        <th>Nombre / Descripción</th>
+                        <th>Tipo de Unidad</th>
+                        <th>Dimensiones</th>
+                        <th>Propietario (Socio)</th>
+                        <th>Ubicación (Garage)</th>
+                        <th class="text-center pe-4">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Bucle que recorre la lista enviada por VehiculoController -->
+                    <tr th:each="v : ${vehiculos}">
+                        <td class="fw-bold ps-4">
+                            <span class="badge bg-secondary fs-6" th:text="${v.matricula}">AAA111</span>
+                        </td>
+                        <td th:text="${v.nombre}">Motorhome Alfa</td>
+                        <td th:text="${v.tipo}">Motorhome</td>
+                        <td th:text="${v.dimensiones}">7.5m x 2.4m</td>
+                        <!-- Acceso relacional: viaja del vehículo al objeto socio de forma transparente -->
+                        <td th:text="${v.socio != null} ? ${v.socio.nombre} : 'Sin propietario asignado'">Juan Pérez</td>
+
+                        <!-- Información del garage asignado -->
+                        <td>
+                                    <span th:if="${v.garage != null}"
+                                          th:text="'Nº ' + ${v.garage.numeroGarage} + ' (Zona ' + ${v.garage.zona.letra} + ')'"
+                                          class="text-muted small">
+                                    </span>
+                            <span th:if="${v.garage == null}" class="badge bg-light text-dark text-wrap">En tránsito / Sin Cochera</span>
+                        </td>
+
+                        <td class="text-center pe-4">
+                            <div class="btn-group" role="group">
+                                <!-- Enlace para editar pasando la matrícula como String variable de ruta -->
+                                <a th:href="@{/vehiculos/editar/{id}(id=${v.matricula})}" class="btn btn-warning btn-sm">✏️ Editar</a>
+
+                                <!-- BOTÓN DE ELIMINACIÓN CON CONFIRMACIÓN JS -->
+                                <a th:href="@{/vehiculos/eliminar/{id}(id=${v.matricula})}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('¿Estás seguro de dar de baja este vehículo? Se removerá del garage si está estacionado.')">❌ Eliminar</a>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    <!-- Fila alternativa si no hay registros cargados -->
+                    <tr th:if="${#lists.isEmpty(vehiculos)}">
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <p class="mb-0">No se encontraron vehículos de motorhomes o trailers registrados en la guardería.</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script th:src="@{https://jsdelivr.net}"></script>
+</body>
+</html>

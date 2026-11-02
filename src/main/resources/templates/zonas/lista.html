@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuración de Zonas - Guardería</title>
+    <link th:href="@{https://jsdelivr.net}" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/}">⚓ Sistema Guardería</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/socios}">Socios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/vehiculos}">Vehículos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/empleados}">Empleados</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/zonas}">Zonas</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/garages}">Garages</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- ALERTAS DINÁMICAS -->
+    <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <strong>✔️ Éxito:</strong> <span th:text="${mensajeExito}">Operación realizada.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <strong>⚠️ Error:</strong> <span th:text="${mensajeError}">No se pudo completar.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- ENCABEZADO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a th:href="@{/}" class="btn btn-outline-secondary btn-sm me-2">⬅️ Volver al Panel</a>
+            <h2 class="d-inline-block align-middle mb-0">Distribución Operativa de Zonas</h2>
+        </div>
+        <a th:href="@{/zonas/nueva}" class="btn btn-primary">➕ Crear Nueva Zona</a>
+    </div>
+
+    <!-- TABLA ESTILIZADA -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4">Letra Sector</th>
+                        <th>Tipo de Vehículo Admitido</th>
+                        <th>Vehículos Contenidos</th>
+                        <th>Profundidad Garages</th>
+                        <th>Ancho Garages</th>
+                        <th class="text-center pe-4">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="z : ${zonas}">
+                        <td class="ps-4 fw-bold text-primary fs-5" th:text="'Zona ' + ${z.letra}">Zona A</td>
+                        <td th:text="${z.tipoVehiculo}">Motorhomes</td>
+                        <td>
+                            <span class="badge bg-info text-dark fw-bold fs-6" th:text="${z.cantidadVehiculos}">0</span> unidades
+                        </td>
+                        <td th:text="${z.profundidadGarages} + ' mts'">6.0 mts</td>
+                        <td th:text="${z.anchoGarages} + ' mts'">3.0 mts</td>
+                        <td class="text-center pe-4">
+                            <div class="btn-group" role="group">
+                                <a th:href="@{/zonas/editar/{id}(id=${z.letra})}" class="btn btn-warning btn-sm">✏️ Editar</a>
+                                <a th:href="@{/zonas/eliminar/{id}(id=${z.letra})}" class="btn btn-danger btn-sm"
+                                   onclick="return confirm('¿Dar de baja esta zona? Se eliminarán los garages e intermedias asociadas en cascada.')">❌ Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(zonas)}">
+                        <td colspan="6" class="text-center text-muted py-5">No hay zonas de distribución geográfica cargadas en el sistema.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{https://jsdelivr.net}"></script>
+</body>
+</html>

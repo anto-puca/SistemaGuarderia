@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Sistema Guardería de Motorhomes</title>
+
+    <!-- INCORRECTO (Tira error de estilos o se ve sin color) -->
+    <!-- <link th:href="@{https://jsdelivr.net}" rel="stylesheet"/> -->
+
+    <!-- CORRECTO (Se conecta directo a internet y activa todos los colores al instante) -->
+    <!--<link href="https://jsdelivr.net" rel="stylesheet"> -->
+
+    <!-- ENLACE LOCAL A BOOSTRAP COMPATIBLE CON THYMELEAF -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+
+    <style>
+           .card-menu {
+               transition: transform 0.2s, box-shadow 0.2s;
+               border-radius: 12px;
+           }
+           .card-menu:hover {
+               transform: translateY(-5px);
+               box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+           }
+           .bg-gradient-dark {
+               background: linear-gradient(180deg, #212529 0%, #343a40 100%);
+           }
+       </style>
+    </head>
+    <body class="bg-light">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR IMPRECCINDIBLE Y LIMPIA -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-dark mb-5 shadow">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold" th:href="@{/}">⚓ Guardería de Motorhomes & Trailers</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active fw-semibold" th:href="@{/}">Panel Central</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- MENSAJE DE ÉXITO GLOBAL SI SE REDIRECCIONA DESDE OTROS ABM -->
+    <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <strong>✔️ Éxito:</strong> <span th:text="${mensajeExito}">Operación realizada.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col text-center">
+            <h1 class="display-4 fw-black text-dark">Consola de Control Integral</h1>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                Bienvenido, **Administrador**. Utilice los módulos inferiores para operar las celdas físicas, registrar la actividad principal de guardado o emitir reportes de antigüedad.
+            </p>
+        </div>
+    </div>
+
+    <!-- GRILLA DE ACCESOS DIRECTOS CENTRALES ASOCIADOS AL ENUNCIADO -->
+    <div class="row g-4 justify-content-center">
+
+        <!-- MÓDULO SOCIOS -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 card-menu">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="card-title text-primary fw-bold mb-0">Padrones de Socios</h4>
+                            <span class="badge bg-primary fs-6 shadow-sm" th:text="${totalSocios}">0</span>
+                        </div>
+                        <p class="card-text text-muted small">
+                            Administración completa (ABM) de clientes. Incluye el reporte de auditoría exclusiva para clasificar socios por antigüedad cronológica.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a th:href="@{/socios}" class="btn btn-primary w-100 py-2 fw-semibold">📂 Abrir Socios</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO VEHÍCULOS -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 card-menu">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="card-title text-success fw-bold mb-0">Flota de Unidades</h4>
+                            <span class="badge bg-success fs-6 shadow-sm" th:text="${totalVehiculos}">0</span>
+                        </div>
+                        <p class="card-text text-muted small">
+                            Gestión del padrón de unidades admitidas: motorhomes, casas rodantes, caravanas y trailers con control riguroso de dimensiones.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a th:href="@{/vehiculos}" class="btn btn-success w-100 py-2 fw-semibold text-white">📂 Ver Unidades</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO GARAGES / COCHERAS -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 card-menu">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="card-title text-info fw-bold mb-0">Control de Garages</h4>
+                            <span class="badge bg-info text-white fs-6 shadow-sm" th:text="${totalGarages}">0</span>
+                        </div>
+                        <p class="card-text text-muted small">
+                            **Actividad Principal:** Estacionar vehículos, registrar la propiedad de celdas, verificar contadores de luz y coberturas de mantenimiento.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a th:href="@{/garages}" class="btn btn-info w-100 py-2 fw-semibold text-white">📂 Controlar Celdas</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO PERSONAL (EMPLEADOS) -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 card-menu">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="card-title text-dark fw-bold mb-0">Staff de Empleados</h4>
+                            <span class="badge bg-dark fs-6 shadow-sm" th:text="${totalEmpleados}">0</span>
+                        </div>
+                        <p class="card-text text-muted small">
+                            Control de legajos del personal operativo y gestión de especialidades técnicas (Mecánica, Electrónica, etc.).
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a th:href="@{/empleados}" class="btn btn-dark w-100 py-2 fw-semibold">📂 Ver Personal</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO ZONAS / SECTORES -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 card-menu">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="card-title text-warning fw-bold mb-0">Zonas Geográficas</h4>
+                        </div>
+                        <p class="card-text text-muted small">
+                            Configuración de sectores alfabéticos, control de cupos y auditoría de dimensiones estándar por área.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a th:href="@{/zonas}" class="btn btn-warning w-100 py-2 fw-semibold text-dark">📂 Ver Sectores</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <footer class="mt-5 pt-4 text-center text-muted border-top">
+        <p>&copy; 2026 - Consola de Control de Guardería de Motorhomes. Arquitectura Java en Capas - SOLID.</p>
+    </footer>
+</div>
+<!-- <script th:src="@{https://jsdelivr.net}"></script> -->
+
+    <!-- SCRIPT LOCAL A BOOSTRAP COMPATIBLE CON THYMELEAF -->
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+
+    </body>
+</html>

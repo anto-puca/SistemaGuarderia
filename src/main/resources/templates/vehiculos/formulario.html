@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Vehículo</title>
+    <link th:href="@{https://jsdelivr.net}" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5" style="max-width: 600px;">
+
+    <!-- CONTENEDOR DE ALERTA DE ERROR (MATRÍCULA DUPLICADA) -->
+    <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <strong>⚠️ Conflicto de Registro:</strong> <span th:text="${mensajeError}">Texto del error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+            <h4 class="mb-0" th:text="${vehiculo.matricula != null and !vehiculo.matricula.empty} ? '✏️ Editar Vehículo' : '➕ Registrar Vehículo'">Formulario</h4>
+        </div>
+        <div class="card-body p-4">
+            <form th:action="@{/vehiculos/guardar}" th:object="${vehiculo}" method="post">
+
+                <!-- Parámetro oculto para indicarle al controlador si es un Alta Nueva o una Edición -->
+                <input type="hidden" name="isAlta" th:value="${vehiculo.matricula == null or vehiculo.matricula.empty} ? 'true' : 'false'" />
+
+                <!-- SECCIÓN: IDENTIFICACIÓN DEL VEHÍCULO -->
+                <h5 class="text-secondary border-bottom pb-2 mb-3">Datos del Dominio</h5>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Matrícula (Patente)</label>
+                    <!-- Si estamos editando, bloqueamos la matrícula porque es la Clave Primaria (PK) -->
+                    <input type="text" th:field="*{matricula}" class="form-control" required
+                           placeholder="ej: AAA111"
+                           th:readonly="${vehiculo.matricula != null and !vehiculo.matricula.empty}" />
+                    <div class="form-text" th:if="${vehiculo.matricula != null and !vehiculo.matricula.empty}">La matrícula no se puede modificar por ser el identificador único.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nombre / Apodo descriptivo</label>
+                    <input type="text" th:field="*{nombre}" class="form-control" required placeholder="ej: Mi Motorhome Rodante o Bermuda Classic" />
+                </div>
+
+                <!-- SECCIÓN: ESPECIFICACIONES (CONSIGNA ORIGINAL) -->
+                <h5 class="text-secondary border-bottom pb-2 mb-3 mt-4">Especificaciones Técnicas</h5>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tipo de Vehículo</label>
+                    <select th:field="*{tipo}" class="form-select" required>
+                        <option value="" hidden>-- Seleccione el Tipo --</option>
+                        <option value="Motorhome">Motorhome</option>
+                        <option value="Casa rodante de arrastre">Casa rodante de arrastre</option>
+                        <option value="Caravana">Caravana</option>
+                        <option value="Trailer">Trailer</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Dimensiones (Largo x Ancho)</label>
+                    <input type="text" th:field="*{dimensiones}" class="form-control" required placeholder="ej: 7.5m x 2.4m" />
+                </div>
+
+                <!-- SECCIÓN: PROPIEDAD (CONSIGNA ORIGINAL) -->
+                <h5 class="text-secondary border-bottom pb-2 mb-3 mt-4">Titular de la Guardería</h5>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Asignar Socio Propietario</label>
+                    <select th:field="*{socio}" class="form-select" required>
+                        <option value="" hidden>-- Seleccione el dueño del vehículo --</option>
+                        <!-- Recorre dinámicamente la lista de socios cargada desde SocioService -->
+                        <option th:each="s : ${socios}"
+                                th:value="${s.id}"
+                                th:text="${s.nombre} + ' (DNI: ' + ${s.dni} + ')'"></option>
+                    </select>
+                </div>
+
+                <!-- BOTONES DE ACCIÓN -->
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/vehiculos}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">Guardar Vehículo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{https://jsdelivr.net}"></script>
+</body>
+</html>

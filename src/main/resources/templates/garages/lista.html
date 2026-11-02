@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario y Control de Garages - Guardería</title>
+    <link th:href="@{https://jsdelivr.net}" rel="stylesheet">
+    <style>
+        .table-responsive {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+        .btn-group-sm > .btn, .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.825rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<!-- BARRA DE NAVEGACIÓN SUPERIOR INTEGRADA -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/}">⚓ Sistema Guardería</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/socios}">Socios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/vehiculos}">Vehículos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/empleados}">Empleados</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/zonas}">Zonas</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/garages}">Garages</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4">
+
+    <!-- CONTROL DE ALERTAS DINÁMICAS (FLASH ATTRIBUTES) -->
+    <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <strong>✔️ Éxito:</strong> <span th:text="${mensajeExito}">Operación realizada correctamente.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <strong>⚠️ Alerta:</strong> <span th:text="${mensajeError}">Ocurrió un inconveniente.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- ENCABEZADO Y ADICIÓN DEL INVENTARIO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a th:href="@{/}" class="btn btn-outline-secondary btn-sm me-2">⬅️ Panel Central</a>
+            <h2 class="d-inline-block align-middle mb-0">Control de Cocheras y Garages</h2>
+        </div>
+        <!-- CUMPLE REQUERIMIENTO ABM: ALTA -->
+        <a th:href="@{/garages/nuevo}" class="btn btn-primary fw-semibold">➕ Registrar Nueva Celda Física</a>
+    </div>
+
+    <!-- TABLA PRINCIPAL DE TRAZABILIDAD -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="ps-3">Nº Cochera</th>
+                        <th>Sector / Zona</th>
+                        <th>Contador (Luz)</th>
+                        <th>Mantenimiento Contractual</th>
+                        <th>Estado de Propiedad (Socio)</th>
+                        <th>Fecha Compra</th>
+                        <th>Unidad Resguardada (Vehículo)</th>
+                        <th>Fecha Asignación</th>
+                        <th class="text-center pe-3" style="width: 25%;">Acciones Operativas e Infraestructura</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="g : ${garages}">
+                        <!-- Número de Garage -->
+                        <td class="fw-bold ps-3" th:text="${g.numeroGarage}">101</td>
+
+                        <!-- Zona Relacional -->
+                        <td>
+                            <span class="badge bg-secondary" th:text="'Zona ' + ${g.zona.letra}">Zona A</span>
+                        </td>
+
+                        <!-- Atributo de la Consigna: Luz -->
+                        <td th:text="${g.lecturaContadorLuz} + ' kWh'" class="font-monospace text-muted small">0.0 kWh</td>
+
+                        <!-- Atributo de la Consigna: Mantenimiento -->
+                        <td>
+                            <span th:if="${g.tieneMantenimiento}" class="badge bg-success">✔️ Contratado</span>
+                            <span th:unless="${g.tieneMantenimiento}" class="badge bg-light text-dark border">❌ Sin Servicio</span>
+                        </td>
+
+                        <!-- Relación de Propiedad Independiente -->
+                        <td>
+                            <span th:if="${g.socio != null}" th:text="${g.socio.nombre}" class="fw-semibold">Juan Pérez</span>
+                            <span th:if="${g.socio == null}" class="text-success fw-bold small">💸 Disponible para Venta</span>
+                        </td>
+
+                        <!-- Fecha de Compra Solicitada -->
+                        <td th:text="${g.fechaCompra != null} ? ${g.fechaCompra} : '-'">-</td>
+
+                        <!-- Actividad Principal: Ocupación Física del Vehículo -->
+                        <td>
+                                    <span th:if="${g.vehiculo != null}" class="text-primary fw-semibold">
+                                        <span th:text="${g.vehiculo.nombre}">Motorhome Alfa</span>
+                                        <small class="text-muted block font-monospace" th:text="' [' + ${g.vehiculo.matricula} + ']'"></small>
+                                    </span>
+                            <span th:if="${g.vehiculo == null}" class="text-muted small italic">🍃 Vacío (Celda Libre)</span>
+                        </td>
+
+                        <!-- Fecha de Asignación Exigida por la Consigna -->
+                        <td th:text="${g.fechaAsignacionVehiculo != null} ? ${g.fechaAsignacionVehiculo} : '-'">-</td>
+
+                        <!-- PANEL COMPLETO DE ACCIONES UNIFICADO (COMERCIAL + ABM STRUCT) -->
+                        <td class="text-center pe-3">
+                            <div class="btn-group gap-1" role="group">
+                                <!-- FLUJOS COMERCIALES -->
+                                <!-- Vender Inmueble (Solo disponible si no tiene dueño) -->
+                                <a th:if="${g.socio == null}" th:href="@{/garages/comprar/{id}(id=${g.numeroGarage})}"
+                                   class="btn btn-success btn-sm fw-semibold" title="Registrar Venta">🛒 Vender</a>
+
+                                <!-- Actividad Principal: Estacionar / Mover Unidad -->
+                                <a th:href="@{/garages/estacionar/{id}(id=${g.numeroGarage})}"
+                                   class="btn btn-info btn-sm text-white fw-semibold" title="Asignar Vehículo">⚓ Estacionar</a>
+
+                                <!-- Liberación rápida (Se muestra si tiene dueño o vehículo asignado) -->
+                                <a th:if="${g.socio != null or g.vehiculo != null}" th:href="@{/garages/liberar/{id}(id=${g.numeroGarage})}"
+                                   class="btn btn-outline-secondary btn-sm" title="Vaciar Celda">Liberar</a>
+
+                                <!-- FLUJOS ABM REQUERIDOS (INFRAESTRUCTURA) -->
+                                <!-- M - Modificar Estructura -->
+                                <a th:href="@{/garages/editar/{id}(id=${g.numeroGarage})}"
+                                   class="btn btn-warning btn-sm" title="Editar Parámetros">✏️ Modificar</a>
+
+                                <!-- B - Baja Estructural -->
+                                <a th:href="@{/garages/eliminar/{id}(id=${g.numeroGarage})}"
+                                   class="btn btn-danger btn-sm" title="Eliminar del Inventario"
+                                   onclick="return confirm('¿Dar de baja esta celda permanentemente de la guardería?')">❌ Borrar</a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Fila de resguardo ante inventario vacío -->
+                    <tr th:if="${#lists.isEmpty(garages)}">
+                        <td colspan="9" class="text-center text-muted py-5">
+                            No se registran celdas de almacenamiento físicas construidas en el inventario de la guardería.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

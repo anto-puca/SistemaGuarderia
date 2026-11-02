@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Estructura de Garage</title>
+    <link th:href="@{https://jsdelivr.net}" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5" style="max-width: 600px;">
+
+    <!-- NOTIFICACIÓN DE NÚMERO DE COCHERA DUPLICADA -->
+    <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <strong>⚠️ Conflicto Estructural:</strong> <span th:text="${mensajeError}">Texto del error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card shadow border-0">
+        <div class="card-header bg-dark text-white text-center py-3">
+            <h4 class="mb-0" th:text="${garage.numeroGarage != null} ? '✏️ Modificar Parámetros de Cochera' : '➕ Construir Nueva Celda Física'">Formulario</h4>
+        </div>
+        <div class="card-body p-4">
+            <form th:action="@{/garages/guardar}" th:object="${garage}" method="post">
+
+                <!-- Bandera de control para indicarle al ABM si crea o actualiza -->
+                <input type="hidden" name="isAlta" th:value="${garage.numeroGarage == null} ? 'true' : 'false'" />
+
+                <h5 class="text-secondary border-bottom pb-2 mb-3">Especificaciones Físicas</h5>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Número de Garage / Cochera</label>
+                    <!-- Bloqueamos el número si es edición, ya que funciona como PK -->
+                    <input type="number" th:field="*{numeroGarage}" class="form-control form-control-lg" required
+                           placeholder="ej: 105" min="1"
+                           th:readonly="${garage.numeroGarage != null}" />
+                    <div class="form-text" th:if="${garage.numeroGarage != null}">El identificador de celda física no se puede alterar una vez construido.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Asignar Sector Operativo (Zona)</label>
+                    <select th:field="*{zona}" class="form-select" required>
+                        <option value="" hidden>-- Seleccione la Zona de Ubicación --</option>
+                        <!-- Carga dinámicamente las zonas y muestra sus métricas de dimensiones -->
+                        <option th:each="z : ${zonas}"
+                                th:value="${z.letra}"
+                                th:text="'Zona ' + ${z.letra} + ' - (Admite: ' + ${z.tipoVehiculo} + ')'"
+                                th:selected="${garage.zona != null and garage.zona.letra == z.letra}">
+                        </option>
+                    </select>
+                </div>
+
+                <h5 class="text-secondary border-bottom pb-2 mb-3 mt-4">Medición de Consumo</h5>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Lectura del Contador de Luz (kWh)</label>
+                    <input type="number" step="0.01" th:field="*{lecturaContadorLuz}" class="form-control font-monospace" required placeholder="0.00" min="0" />
+                    <div class="form-text">Establezca el kilometraje eléctrico de consumo acumulado de la celda.</div>
+                </div>
+
+                <!-- CONSERVACIÓN DE ESTADOS INTERNOS DURANTE LA EDICIÓN DE ESTRUCTURA -->
+                <div th:if="${garage.numeroGarage != null}">
+                    <input type="hidden" th:field="*{fechaCompra}" />
+                    <input type="hidden" th:field="*{fechaAsignacionVehiculo}" />
+                    <input type="hidden" th:field="*{tieneMantenimiento}" />
+                </div>
+
+                <div class="d-flex justify-content-between pt-2">
+                    <a th:href="@{/garages}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-dark px-4 fw-semibold">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{https://jsdelivr.net}"></script>
+</body>
+</html>

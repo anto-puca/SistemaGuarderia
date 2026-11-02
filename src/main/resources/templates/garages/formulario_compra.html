@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Procesar Venta de Garage</title>
+    <link th:href="@{https://jsdelivr.net}" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+            <h4 class="mb-0" th:text="'Adquisición de Garage Nº ' + ${garage.numeroGarage}">Venta</h4>
+        </div>
+        <div class="card-body p-4">
+            <form th:action="@{/garages/guardar-compra}" method="post">
+                <input type="hidden" name="numeroGarage" th:value="${garage.numeroGarage}" />
+
+                <!-- SELECCIÓN DEL SOCIO COMPRADOR -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Seleccionar Socio Comprador</label>
+                    <select name="socioId" id="socioSelect" class="form-select" required onchange="filtrarVehiculos()">
+                        <option value="" hidden>-- Seleccione el Adquirente --</option>
+                        <option th:each="s : ${socios}"
+                                th:value="${s.id}"
+                                th:text="${s.nombre}"
+                                th:data-vehiculos="${s.vehiculos != null} ? ${#strings.concat(s.vehiculos)} : ''"></option>
+                    </select>
+                </div>
+
+                <!-- VINCULACIÓN OPCIONAL DE VEHÍCULO -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Asignar Vehículo al Garage (Opcional)</label>
+                    <select name="matriculaVehiculo" id="vehiculoSelect" class="form-select">
+                        <option value="">-- Dejar sin Vehículo asignado --</option>
+                        <!-- En sistemas reales estas sublistas se cargan idealmente por AJAX, aquí se habilita por flujo básico -->
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/garages}" class="btn btn-secondary">Volver</a>
+                    <button type="submit" class="btn btn-primary px-4">Confirmar Operación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filtrarVehiculos() {
+        // Lógica para poblar vehículos de manera dinámica o mediante integración AJAX en producción.
+        console.log("Socio cambiado. Filtrando flota...");
+    }
+</script>
+</body>
+</html>
