@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso - Guardería Motorhomes</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card card-login shadow p-4 bg-white">
+        <h3 class="text-center mb-3">🚐 Guardería Motorhomes</h3>
+        <p class="text-muted text-center small mb-4">Ingresá tus credenciales para continuar</p>
+
+        <form id="form-login">
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" id="email" class="form-control" placeholder="ejemplo@guarderia.com" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+        </form>
+
+        <div id="mensaje-error" class="alert alert-danger mt-3 d-none text-center small" role="alert"></div>
+    </div>
+</div>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

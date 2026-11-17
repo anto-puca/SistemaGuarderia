@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrador - Guardería Motorhomes</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand fw-bold">🚐 Guardería de Motorhomes - Panel Administrador</span>
+    <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">Cerrar Sesión</button>
+</nav>
+
+<div class="container my-4">
+    <div id="alerta-global" class="alert d-none" role="alert"></div>
+
+    <!-- PESTAÑAS DE NAVEGACIÓN BOOTSTRAP -->
+    <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-socios" type="button">Socios</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-empleados" type="button">Empleados</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-zonas" type="button">Zonas</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-garages" type="button">Garages</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-vehiculos" type="button">Vehículos</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-asignaciones" type="button">Asignar Zonas</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- 1. PESTAÑA SOCIOS -->
+        <div class="tab-pane fade show active" id="tab-socios">
+            <div class="card p-3 mb-4 shadow-sm bg-white">
+                <h5 class="mb-3">Registrar Nuevo Socio</h5>
+                <form id="form-socio" class="row g-2">
+                    <div class="col-md-3"><input type="text" id="soc-nombre" class="form-control" placeholder="Nombre completo" required></div>
+                    <div class="col-md-2"><input type="text" id="soc-dni" class="form-control" placeholder="DNI" required></div>
+                    <div class="col-md-3"><input type="text" id="soc-direccion" class="form-control" placeholder="Dirección" required></div>
+                    <div class="col-md-2"><input type="text" id="soc-telefono" class="form-control" placeholder="Teléfono" required></div>
+                    <div class="col-md-2"><input type="date" id="soc-fecha" class="form-control" required></div>
+                    <div class="col-md-4"><input type="email" id="soc-email" class="form-control" placeholder="Email de acceso" required></div>
+                    <div class="col-md-4"><input type="password" id="soc-pass" class="form-control" placeholder="Contraseña inicial" required></div>
+                    <div class="col-md-4"><button type="submit" class="btn btn-primary w-100">Guardar Socio</button></div>
+                </form>
+            </div>
+            <h5>Socios (Ordenados por Antigüedad)</h5>
+            <table class="table table-bordered table-striped bg-white">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>DNI</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Ingreso</th>
+                    <th>Acción</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-socios"></tbody>
+            </table>
+        </div>
+
+        <!-- 2. PESTAÑA EMPLEADOS -->
+        <div class="tab-pane fade" id="tab-empleados">
+            <div class="card p-3 mb-4 shadow-sm bg-white">
+                <h5 class="mb-3">Registrar Nuevo Empleado</h5>
+                <form id="form-empleado" class="row g-2">
+                    <div class="col-md-3"><input type="text" id="emp-nombre" class="form-control" placeholder="Nombre completo" required></div>
+                    <div class="col-md-2"><input type="text" id="emp-codigo" class="form-control" placeholder="Código (ej. EMP-02)" required></div>
+                    <div class="col-md-3"><input type="text" id="emp-especialidad" class="form-control" placeholder="Especialidad" required></div>
+                    <div class="col-md-2"><input type="text" id="emp-direccion" class="form-control" placeholder="Dirección" required></div>
+                    <div class="col-md-2"><input type="text" id="emp-telefono" class="form-control" placeholder="Teléfono" required></div>
+                    <div class="col-md-4"><input type="email" id="emp-email" class="form-control" placeholder="Email" required></div>
+                    <div class="col-md-4"><input type="password" id="emp-pass" class="form-control" placeholder="Contraseña" required></div>
+                    <div class="col-md-4"><button type="submit" class="btn btn-primary w-100">Guardar Empleado</button></div>
+                </form>
+            </div>
+            <h5>Listado de Empleados</h5>
+            <table class="table table-bordered table-striped bg-white">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Especialidad</th>
+                    <th>Email</th>
+                    <th>Acción</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-empleados"></tbody>
+            </table>
+        </div>
+
+        <!-- 3. PESTAÑA ZONAS -->
+        <div class="tab-pane fade" id="tab-zonas">
+            <div class="card p-3 mb-4 shadow-sm bg-white">
+                <h5 class="mb-3">Registrar Nueva Zona</h5>
+                <form id="form-zona" class="row g-2">
+                    <div class="col-md-2"><input type="text" id="zona-letra" maxlength="1" class="form-control" placeholder="Letra (A, B...)" required></div>
+                    <div class="col-md-3"><input type="text" id="zona-tipo" class="form-control" placeholder="Tipo Vehículos" required></div>
+                    <div class="col-md-2"><input type="number" id="zona-num" class="form-control" placeholder="Capacidad Vehíc." required></div>
+                    <div class="col-md-2"><input type="number" step="0.1" id="zona-prof" class="form-control" placeholder="Profundidad (m)" required></div>
+                    <div class="col-md-2"><input type="number" step="0.1" id="zona-ancho" class="form-control" placeholder="Ancho (m)" required></div>
+                    <div class="col-md-1"><button type="submit" class="btn btn-primary w-100">Crear</button></div>
+                </form>
+            </div>
+            <h5>Zonas de la Guardería</h5>
+            <table class="table table-bordered table-striped bg-white">
+                <thead class="table-dark">
+                <tr>
+                    <th>Letra</th>
+                    <th>Tipo Vehículos</th>
+                    <th>Capacidad</th>
+                    <th>Profundidad</th>
+                    <th>Ancho</th>
+                    <th>Acción</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-zonas"></tbody>
+            </table>
+        </div>
+
+        <!-- 4. PESTAÑA GARAGES Y COMPRA -->
+        <div class="tab-pane fade" id="tab-garages">
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="card p-3 shadow-sm bg-white">
+                        <h5 class="mb-3">Alta de Garage</h5>
+                        <form id="form-garage" class="row g-2">
+                            <div class="col-md-3"><input type="number" id="gar-num" class="form-control" placeholder="N° Garage" required></div>
+                            <div class="col-md-3"><input type="text" id="gar-zona" maxlength="1" class="form-control" placeholder="Zona (A)" required></div>
+                            <div class="col-md-3"><input type="number" step="0.1" id="gar-luz" class="form-control" placeholder="Contador Luz" required></div>
+                            <div class="col-md-3 form-check d-flex align-items-center justify-content-center">
+                                <input type="checkbox" id="gar-mant" class="form-check-input me-1">
+                                <label class="form-check-label" for="gar-mant">Mantenim.</label>
+                            </div>
+                            <div class="col-12"><button type="submit" class="btn btn-primary w-100">Crear Garage</button></div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card p-3 shadow-sm bg-white">
+                        <h5 class="mb-3">Registrar Compra de Garage por Socio</h5>
+                        <form id="form-compra-garage" class="row g-2">
+                            <div class="col-md-4"><input type="number" id="comp-gar-num" class="form-control" placeholder="N° Garage" required></div>
+                            <div class="col-md-4"><input type="number" id="comp-soc-id" class="form-control" placeholder="ID Socio" required></div>
+                            <div class="col-md-4"><input type="date" id="comp-fecha" class="form-control" required></div>
+                            <div class="col-12"><button type="submit" class="btn btn-success w-100">Registrar Compra</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <h5>Estado de Garages</h5>
+            <table class="table table-bordered table-striped bg-white">
+                <thead class="table-dark">
+                <tr>
+                    <th>N°</th>
+                    <th>Zona</th>
+                    <th>Luz</th>
+                    <th>Mant.</th>
+                    <th>Propietario (ID)</th>
+                    <th>Fecha Compra</th>
+                    <th>Vehículo</th>
+                    <th>Fecha Asig.</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-garages"></tbody>
+            </table>
+        </div>
+
+        <!-- 5. PESTAÑA VEHÍCULOS -->
+        <div class="tab-pane fade" id="tab-vehiculos">
+            <div class="card p-3 mb-4 shadow-sm bg-white">
+                <h5 class="mb-3">Registrar Vehículo y Asignar a Garage</h5>
+                <form id="form-vehiculo" class="row g-2">
+                    <div class="col-md-2"><input type="text" id="veh-mat" class="form-control" placeholder="Matrícula" required></div>
+                    <div class="col-md-2"><input type="text" id="veh-nom" class="form-control" placeholder="Nombre" required></div>
+                    <div class="col-md-2"><input type="text" id="veh-tipo" class="form-control" placeholder="Tipo" required></div>
+                    <div class="col-md-2"><input type="text" id="veh-dim" class="form-control" placeholder="Dimensiones" required></div>
+                    <div class="col-md-1"><input type="number" id="veh-soc" class="form-control" placeholder="ID Soc." required></div>
+                    <div class="col-md-1"><input type="number" id="veh-gar" class="form-control" placeholder="N° Gar." required></div>
+                    <div class="col-md-2"><input type="date" id="veh-fecha" class="form-control" required></div>
+                    <div class="col-12"><button type="submit" class="btn btn-primary w-100">Registrar y Estacionar Vehículo</button></div>
+                </form>
+            </div>
+            <h5>Vehículos Registrados</h5>
+            <table class="table table-bordered table-striped bg-white">
+                <thead class="table-dark">
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Dimensiones</th>
+                    <th>ID Socio</th>
+                    <th>Garage</th>
+                    <th>Fecha Asig.</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-vehiculos"></tbody>
+            </table>
+        </div>
+
+        <!-- 6. PESTAÑA ASIGNACIÓN EMPLEADOS A ZONAS -->
+        <div class="tab-pane fade" id="tab-asignaciones">
+            <div class="card p-3 mb-4 shadow-sm bg-white">
+                <h5 class="mb-3">Asignar Empleado a Zona</h5>
+                <form id="form-asignacion" class="row g-2">
+                    <div class="col-md-3"><input type="number" id="asig-emp" class="form-control" placeholder="ID Empleado" required></div>
+                    <div class="col-md-3"><input type="text" id="asig-zona" maxlength="1" class="form-control" placeholder="Letra Zona (A)" required></div>
+                    <div class="col-md-3"><input type="number" id="asig-cant" class="form-control" placeholder="Cant. Vehículos a Cargo" required></div>
+                    <div class="col-md-3"><button type="submit" class="btn btn-primary w-100">Guardar Asignación</button></div>
+                </form>
+            </div>
+            <h5>Asignaciones Vigentes</h5>
+            <table class="table table-bordered table-striped bg-white">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID Emp.</th>
+                    <th>Empleado</th>
+                    <th>Zona</th>
+                    <th>Tipo Zona</th>
+                    <th>Vehículos a Cargo</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-asignaciones"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
+

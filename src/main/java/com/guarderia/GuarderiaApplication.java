@@ -2,6 +2,7 @@ package com.guarderia;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
 
 /**
  * Clase Principal y Punto de Entrada del Sistema de Gestión de la Guardería.
@@ -13,7 +14,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 3. @SpringBootConfiguration: Permite registrar configuraciones adicionales en el contexto.
  */
 
+
 @SpringBootApplication
+
 public class GuarderiaApplication {
 
 	// Inicia el motor de Spring Boot y levanta la aplicación completa

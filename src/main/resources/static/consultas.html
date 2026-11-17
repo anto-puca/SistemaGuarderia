@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Consultas - Guardería Motorhomes</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand fw-bold" id="bienvenida">Bienvenido</span>
+    <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">Cerrar Sesión</button>
+</nav>
+
+<div class="container my-4">
+    <!-- VISTA EXCLUSIVA PARA SOCIOS -->
+    <section id="panel-socio" class="d-none">
+        <div class="card p-4 shadow-sm bg-white">
+            <h4 class="mb-3">Mis Vehículos y Garages Asignados</h4>
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nombre Vehículo</th>
+                    <th>Tipo</th>
+                    <th>Dimensiones</th>
+                    <th>N° Garage Asignado</th>
+                    <th>Fecha Asignación</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-vehiculos-socio"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- VISTA EXCLUSIVA PARA EMPLEADOS -->
+    <section id="panel-empleado" class="d-none">
+        <div class="card p-4 shadow-sm bg-white">
+            <h4 class="mb-3">Mis Zonas y Vehículos a Cargo</h4>
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th>Zona (Letra)</th>
+                    <th>Tipo de Vehículos en Zona</th>
+                    <th>Cantidad de Vehículos a Cargo</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-zonas-empleado"></tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/consultas.js"></script>
+</body>
+</html>
+
+</body>
+</html>
