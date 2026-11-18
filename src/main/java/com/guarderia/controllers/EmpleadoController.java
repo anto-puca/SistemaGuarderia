@@ -61,4 +61,9 @@ public class EmpleadoController {
     public ResponseEntity<List<AsignacionDTO>> listarMisAsignaciones(@PathVariable Long empleadoId) {
         return ResponseEntity.ok(empleadoService.listarAsignacionesPorEmpleado(empleadoId));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmpleadoDTO> actualizarEmpleado(@PathVariable Long id, @Valid @RequestBody EmpleadoCreateDTO dto) {
+        return ResponseEntity.ok(empleadoService.actualizarEmpleado(id, dto));
+    }
 }

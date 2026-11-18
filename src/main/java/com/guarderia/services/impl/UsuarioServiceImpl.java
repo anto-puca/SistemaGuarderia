@@ -69,5 +69,21 @@ public class UsuarioServiceImpl implements IUsuarioService {
     public void eliminarSocio(Long id) {
         usuarioRepository.deleteById(id);
     }
+
+    @Override
+    public SocioDTO actualizarSocio(Long id, SocioCreateDTO dto) {
+        Socio socio = (Socio) usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+        socio.setNombre(dto.nombre());
+        socio.setDireccion(dto.direccion());
+        socio.setTelefono(dto.telefono());
+        socio.setEmail(dto.email());
+        if (dto.password() != null && !dto.password().isBlank()) {
+            socio.setPassword(dto.password());
+        }
+        socio.setDni(dto.dni());
+        socio.setFechaIngreso(dto.fechaIngreso());
+        return new SocioDTO(usuarioRepository.save(socio));
+    }
 }
 

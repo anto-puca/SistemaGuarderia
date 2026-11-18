@@ -61,7 +61,9 @@ public class EmpleadoServiceImpl implements IEmpleadoService {
             throw new RuntimeException("El usuario seleccionado no es un Empleado");
         }
 
-        Zona zona = zonaRepo.findById(dto.zonaLetra())
+       Zona zona = zonaRepo.findById(dto.zonaLetra())
+
+
                 .orElseThrow(() -> new RuntimeException("Zona no encontrada"));
 
         // Creamos la entidad intermedia con la clave compuesta (empleadoId + zonaLetra)
@@ -87,5 +89,21 @@ public class EmpleadoServiceImpl implements IEmpleadoService {
         return asignacionRepo.findAll().stream()
                 .map(AsignacionDTO::new)
                 .toList();
+    }
+
+    @Override
+    public EmpleadoDTO actualizarEmpleado(Long id, EmpleadoCreateDTO dto) {
+        Empleado emp = (Empleado) usuarioRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+        emp.setNombre(dto.nombre());
+        emp.setDireccion(dto.direccion());
+        emp.setTelefono(dto.telefono());
+        emp.setEmail(dto.email());
+        if (dto.password() != null && !dto.password().isBlank()) {
+            emp.setPassword(dto.password());
+        }
+        emp.setCodigo(dto.codigo());
+        emp.setEspecialidad(dto.especialidad());
+        return new EmpleadoDTO(usuarioRepo.save(emp));
     }
 }

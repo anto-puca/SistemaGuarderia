@@ -19,5 +19,13 @@ public interface IGestionGuarderiaService {
     List<VehiculoDTO> listarVehiculos();
     List<VehiculoDTO> listarVehiculosPorSocio(Long socioId);
     VehiculoDTO registrarVehiculoYAsignarGarage(VehiculoDTO dto);
+
+
+    void eliminarGarage(Integer numeroGarage);
+    void eliminarVehiculo(String matricula);
+////
+    VehiculoDTO actualizarVehiculo(String matricula, VehiculoDTO dto);
+
+
 }
 

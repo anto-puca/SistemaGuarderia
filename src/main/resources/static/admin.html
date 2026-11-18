@@ -43,8 +43,9 @@
         <!-- 1. PESTAÑA SOCIOS -->
         <div class="tab-pane fade show active" id="tab-socios">
             <div class="card p-3 mb-4 shadow-sm bg-white">
-                <h5 class="mb-3">Registrar Nuevo Socio</h5>
+                <h5 class="mb-3">Gestionar Socio</h5>
                 <form id="form-socio" class="row g-2">
+                    <input type="hidden" id="soc-id-edit">
                     <div class="col-md-3"><input type="text" id="soc-nombre" class="form-control" placeholder="Nombre completo" required></div>
                     <div class="col-md-2"><input type="text" id="soc-dni" class="form-control" placeholder="DNI" required></div>
                     <div class="col-md-3"><input type="text" id="soc-direccion" class="form-control" placeholder="Dirección" required></div>
@@ -75,8 +76,9 @@
         <!-- 2. PESTAÑA EMPLEADOS -->
         <div class="tab-pane fade" id="tab-empleados">
             <div class="card p-3 mb-4 shadow-sm bg-white">
-                <h5 class="mb-3">Registrar Nuevo Empleado</h5>
+                <h5 class="mb-3">Gestionar Empleado</h5>
                 <form id="form-empleado" class="row g-2">
+                    <input type="hidden" id="emp-id-edit">
                     <div class="col-md-3"><input type="text" id="emp-nombre" class="form-control" placeholder="Nombre completo" required></div>
                     <div class="col-md-2"><input type="text" id="emp-codigo" class="form-control" placeholder="Código (ej. EMP-02)" required></div>
                     <div class="col-md-3"><input type="text" id="emp-especialidad" class="form-control" placeholder="Especialidad" required></div>
@@ -106,8 +108,9 @@
         <!-- 3. PESTAÑA ZONAS -->
         <div class="tab-pane fade" id="tab-zonas">
             <div class="card p-3 mb-4 shadow-sm bg-white">
-                <h5 class="mb-3">Registrar Nueva Zona</h5>
+                <h5 class="mb-3">Gestionar Zona</h5>
                 <form id="form-zona" class="row g-2">
+                    <input type="hidden" id="zona-id-edit">
                     <div class="col-md-2"><input type="text" id="zona-letra" maxlength="1" class="form-control" placeholder="Letra (A, B...)" required></div>
                     <div class="col-md-3"><input type="text" id="zona-tipo" class="form-control" placeholder="Tipo Vehículos" required></div>
                     <div class="col-md-2"><input type="number" id="zona-num" class="form-control" placeholder="Capacidad Vehíc." required></div>
@@ -137,8 +140,9 @@
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
                     <div class="card p-3 shadow-sm bg-white">
-                        <h5 class="mb-3">Alta de Garage</h5>
+                        <h5 class="mb-3">Gestionar Garage</h5>
                         <form id="form-garage" class="row g-2">
+                            <input type="hidden" id="gar-id-edit">
                             <div class="col-md-3"><input type="number" id="gar-num" class="form-control" placeholder="N° Garage" required></div>
                             <div class="col-md-3"><input type="text" id="gar-zona" maxlength="1" class="form-control" placeholder="Zona (A)" required></div>
                             <div class="col-md-3"><input type="number" step="0.1" id="gar-luz" class="form-control" placeholder="Contador Luz" required></div>
@@ -174,6 +178,7 @@
                     <th>Fecha Compra</th>
                     <th>Vehículo</th>
                     <th>Fecha Asig.</th>
+                    <th>Acción</th>
                 </tr>
                 </thead>
                 <tbody id="tabla-garages"></tbody>
@@ -183,8 +188,9 @@
         <!-- 5. PESTAÑA VEHÍCULOS -->
         <div class="tab-pane fade" id="tab-vehiculos">
             <div class="card p-3 mb-4 shadow-sm bg-white">
-                <h5 class="mb-3">Registrar Vehículo y Asignar a Garage</h5>
+                <h5 class="mb-3">Gestionar Vehículo y Asignar a Garage</h5>
                 <form id="form-vehiculo" class="row g-2">
+                    <input type="hidden" id="veh-id-edit">
                     <div class="col-md-2"><input type="text" id="veh-mat" class="form-control" placeholder="Matrícula" required></div>
                     <div class="col-md-2"><input type="text" id="veh-nom" class="form-control" placeholder="Nombre" required></div>
                     <div class="col-md-2"><input type="text" id="veh-tipo" class="form-control" placeholder="Tipo" required></div>
@@ -206,6 +212,7 @@
                     <th>ID Socio</th>
                     <th>Garage</th>
                     <th>Fecha Asig.</th>
+                    <th>Acción</th>
                 </tr>
                 </thead>
                 <tbody id="tabla-vehiculos"></tbody>
@@ -240,8 +247,7 @@
     </div>
 </div>
 
-<script src="js/bootstrap.bundle.min.js"></script>
+<script type="module" src="js/bootstrap.bundle.min.js"></script>
 <script src="js/admin.js"></script>
 </body>
 </html>
-

@@ -46,4 +46,10 @@ public class UsuarioController {
         usuarioService.eliminarSocio(id);
         return ResponseEntity.noContent().build();
     }
+
+       @PutMapping("/socios/{id}")
+    public ResponseEntity<SocioDTO> actualizarSocio(@PathVariable Long id, @Valid @RequestBody SocioCreateDTO dto) {
+        return ResponseEntity.ok(usuarioService.actualizarSocio(id, dto));
+    }
+
 }

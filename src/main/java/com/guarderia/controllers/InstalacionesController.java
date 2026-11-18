@@ -80,5 +80,40 @@ public class InstalacionesController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
+    ////
+    @PutMapping("/vehiculos/{matricula}")
+    public ResponseEntity<?> actualizarVehiculo(@PathVariable String matricula, @Valid @RequestBody VehiculoDTO dto) {
+        try {
+            return ResponseEntity.ok(gestionService.actualizarVehiculo(matricula, dto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+
+    @PutMapping("/zonas/{letra}")
+    public ResponseEntity<ZonaDTO> actualizarZona(@PathVariable String letra, @Valid @RequestBody ZonaDTO dto) {
+        return ResponseEntity.ok(gestionService.guardarZona(dto));
+    }
+
+    @PutMapping("/garages/{numeroGarage}")
+    public ResponseEntity<GarageDTO> actualizarGarage(@PathVariable Integer numeroGarage, @Valid @RequestBody GarageDTO dto) {
+        return ResponseEntity.ok(gestionService.guardarGarage(dto));
+    }
+
+    @DeleteMapping("/garages/{numeroGarage}")
+    public ResponseEntity<Void> eliminarGarage(@PathVariable Integer numeroGarage) {
+        // Asegurate de tener garageRepo.deleteById(numeroGarage) en tu servicio
+        gestionService.eliminarGarage(numeroGarage);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/vehiculos/{matricula}")
+    public ResponseEntity<Void> eliminarVehiculo(@PathVariable String matricula) {
+        // Asegurate de liberar el garage y borrar el vehículo en tu servicio
+        gestionService.eliminarVehiculo(matricula);
+        return ResponseEntity.noContent().build();
+    }
+
 }
 

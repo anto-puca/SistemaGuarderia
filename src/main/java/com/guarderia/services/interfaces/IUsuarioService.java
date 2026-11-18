@@ -9,7 +9,12 @@ import java.util.List;
 
 public interface IUsuarioService {
     LoginResponseDTO autenticar(LoginRequestDTO loginDTO);
+
     List<SocioDTO> listarSociosPorAntiguedad();
+
     SocioDTO registrarSocio(SocioCreateDTO dto);
+
     void eliminarSocio(Long id);
+
+    SocioDTO actualizarSocio(Long id, SocioCreateDTO dto);
 }

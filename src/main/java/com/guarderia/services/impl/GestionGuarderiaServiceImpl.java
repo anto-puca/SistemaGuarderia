@@ -124,4 +124,75 @@ public class GestionGuarderiaServiceImpl implements IGestionGuarderiaService {
         v.setGarage(garage);
         return new VehiculoDTO(v);
     }
+
+    //////
+    @Override
+    @Transactional
+    public void eliminarGarage(Integer numeroGarage) {
+        garageRepo.deleteById(numeroGarage);
+    }
+
+    @Override
+    @Transactional
+    public void eliminarVehiculo(String matricula) {
+        Vehiculo vehiculo = vehiculoRepo.findById(matricula)
+                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+
+        // 1. Si el vehículo está estacionado en un garage, primero liberamos ese garage
+        if (vehiculo.getGarage() != null) {
+            Garage garage = vehiculo.getGarage();
+            garage.setVehiculo(null);
+            garage.setFechaAsignacionVehiculo(null);
+            garageRepo.save(garage);
+        }
+
+        // 2. Ahora que ninguna clave foránea lo apunta, borramos el vehículo sin errores
+        vehiculoRepo.delete(vehiculo);
+    }
+    ////
+    @Override
+    @Transactional
+    public VehiculoDTO actualizarVehiculo(String matricula, VehiculoDTO dto) {
+        Vehiculo v = vehiculoRepo.findById(matricula)
+                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+
+        Usuario usuario = usuarioRepo.findById(dto.socioId())
+                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+        if (!(usuario instanceof Socio socio)) {
+            throw new RuntimeException("El propietario debe ser un Socio");
+        }
+
+        // Actualizamos los datos propios del vehículo
+        v.setNombre(dto.nombre());
+        v.setTipo(dto.tipo());
+        v.setDimensiones(dto.dimensiones());
+        v.setSocio(socio);
+
+        Garage garageNuevo = garageRepo.findById(dto.numeroGarage())
+                .orElseThrow(() -> new RuntimeException("Garage no encontrado"));
+
+        Garage garageActual = v.getGarage();
+
+        // Si cambió de garage, liberamos el anterior y ocupamos el nuevo
+        if (garageActual == null || !garageActual.getNumeroGarage().equals(garageNuevo.getNumeroGarage())) {
+            if (garageNuevo.getVehiculo() != null) {
+                throw new RuntimeException("El nuevo garage ya está ocupado por otro vehículo");
+            }
+            if (garageActual != null) {
+                garageActual.setVehiculo(null);
+                garageActual.setFechaAsignacionVehiculo(null);
+                garageRepo.save(garageActual);
+            }
+            garageNuevo.setVehiculo(v);
+            v.setGarage(garageNuevo);
+        }
+
+        // Actualizamos la fecha de asignación
+        garageNuevo.setFechaAsignacionVehiculo(dto.fechaAsignacion() != null ? dto.fechaAsignacion() : LocalDate.now());
+        garageRepo.save(garageNuevo);
+
+        return new VehiculoDTO(vehiculoRepo.save(v));
+    }
+
+
 }

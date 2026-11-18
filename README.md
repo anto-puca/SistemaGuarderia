@@ -32,7 +32,7 @@ El acceso al sistema está segmentado en **3 roles diferenciados**, controlados 
 ### Frontend (100% Desacoplado - Lado del Cliente)
 * **HTML5:** Estructura semántica de las vistas (`index.html`, `login.html`, `admin.html` y `consultas.html`).
 * **CSS3 y Bootstrap 5 (Local):** Diseño responsivo, grillas, pestañas, tarjetas, tablas y alertas visuales, alojado localmente en `static/css` y `static/js` para funcionar sin conexión a internet.
-* **JavaScript Vanilla (ES6+):** Organizado en módulos independientes (`auth.js`, `admin.js` y `consultas.js`) para manejar la lógica de interfaz y la manipulación dinámica del DOM.
+* **JavaScript Vanilla (ES6+):** Organizado en módulos independientes (`auth.js`, `admin0.js` y `consultas.js`) para manejar la lógica de interfaz y la manipulación dinámica del DOM.
 * **Fetch API (HTTP / JSON):** Comunicación asíncrona (`GET`, `POST`, `PUT`, `DELETE`) contra los *endpoints* REST de Spring Boot.
 * **Web Storage API (`localStorage`):** Gestión de sesión del usuario autenticado (`id`, `nombre`, `email` y `rol`) en el navegador para controlar accesos y vistas según el rol.
 
@@ -50,7 +50,7 @@ El desarrollo está estructurado bajo una **arquitectura en capas** respetando l
 
 ### Estructura del Cliente (`src/main/resources/static/`)
 * **Vistas HTML:** `index.html`, `login.html`, `admin.html`, `consultas.html`.
-* **Scripts JS:** `auth.js` (autenticación y manejo de `localStorage`), `admin.js` (operaciones ABM para administradores), `consultas.js` (vistas de consulta para socios y empleados).
+* **Scripts JS:** `auth.js` (autenticación y manejo de `localStorage`), `admin0.js` (operaciones ABM para administradores), `consultas.js` (vistas de consulta para socios y empleados).
 * **Recursos locales:** `css/` y `js/` (Bootstrap 5 local y estilos propios).
 
 ---
