@@ -69,7 +69,7 @@ El desarrollo está estructurado bajo una **arquitectura en capas** respetando l
 ### 4. Diagrama de Clases (Entidades del Dominio)
 ![Diagrama de Entidades](docs/clases_general_entidades.png)
 
-*(Los diagramas complementarios sobre **DTOs** y el **flujo particular de la entidad Socio** se encuentran almacenados en la carpeta [`docs/`](docs/) y detallados en el informe de evaluación).*
+*(Los diagramas complementarios sobre **DTOs** y el **flujo particular de la entidad Socio** se encuentran almacenados en la carpeta [`docs/`](docs/clases_general_dtos, docs/clases_particular_socio) y detallados en el informe de evaluación).*
 
 ---
 
