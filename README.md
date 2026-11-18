@@ -61,13 +61,13 @@ El desarrollo está estructurado bajo una **arquitectura en capas** respetando l
 ![Diagrama de Casos de Uso](docs/diagrama_casos_de_uso.png)
 
 ### 2. Diagrama Entidad-Relación (DER)
-![Diagrama Entidad-Relación](docs/05_der.png)
+![Diagrama Entidad-Relación](docs/der.png)
 
 ### 3. Arquitectura General por Paquetes
-![Diagrama de Paquetes](docs/03_clases_general_paquetes.png)
+![Diagrama de Paquetes](docs/clases_general_paquetes.png)
 
 ### 4. Diagrama de Clases (Entidades del Dominio)
-![Diagrama de Entidades](docs/04_clases_general_entidades.png)
+![Diagrama de Entidades](docs/clases_general_entidades.png)
 
 *(Los diagramas complementarios sobre **DTOs** y el **flujo particular de la entidad Socio** se encuentran almacenados en la carpeta [`docs/`](docs/) y detallados en el informe de evaluación).*
 
